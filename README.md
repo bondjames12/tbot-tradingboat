@@ -23,7 +23,8 @@ Overall, TBOT enhances the capabilities of Interactive Brokers by integrating wi
 
 TBOT is built using a combination of the Subscriber of the Pub/Sub pattern and the Observer pattern. It uses the Subscriber to receive messages from a Redis Stream or Pub/Sub and the Observer to deliver messages to Interactive Brokers, message applications, and the watchdog. TBOT is designed to be a flexible and extensible system that can be customized to meet the needs of various trading strategies and workflows. The architecture of TBOT enables it to be easily integrated with other systems and services, making it a powerful tool for automating trading processes.
 
-![The-Architecture-of-TBOT](https://github.com/PlusGenie/tbot-tradingboat/assets/1986788/17e80fd5-e740-4cf1-acb1-93bbe225e33b)
+![image](https://github.com/bondjames12/tbot-tradingboat/assets/492840/ffa1296a-78ac-4fa2-97a7-42a065b72e9a)
+
 
 
 ### TBOT on TradingBoat
@@ -32,7 +33,8 @@ TradingBoat is a platform that includes Nginx/Ngrok, Flask, Redis, TBOT, and IB 
 
 TBOT serves as the message decoder and order placement tool, and is the brain of TradingBoat. We can refer to it as TBOT on TradingBoat.
 
-![TBOT-on-TradingBoat](https://user-images.githubusercontent.com/1986788/226757087-16d96ad4-30f6-4310-bc70-eec3cc38dea9.png)
+![image](https://github.com/bondjames12/tbot-tradingboat/assets/492840/1d3a3d49-f6c5-4056-97a9-f1c69abf28e3)
+
 
 <mark>If you install TradingBoat using Docker from [https://github.com/PlusGenie/ib-gateway-docker](https://github.com/PlusGenie/ib-gateway-docker), the TBOT application will be automatically installed within Docker containers.</mark>
 
@@ -92,7 +94,8 @@ pip install -e .
 ## Configuring the TBOT Application
 To configure the default environment variables for TBOT, copy the example dotenv file:
 
-![tbot_tradingboat_environment](https://github.com/PlusGenie/tbot-tradingboat/assets/1986788/39ae2f49-dc14-4c0c-8fe0-1fbb830343a8)
+![image](https://github.com/bondjames12/tbot-tradingboat/assets/492840/d848533d-899b-48d8-8be6-3fee5f647242)
+
 
 ```console
 cp src/tbot_tradingboat/utils/examples/dotenv ~/.env
