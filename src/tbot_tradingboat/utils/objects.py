@@ -27,7 +27,7 @@ class EnvSettings:
         default_factory=partial(os.environ.get, "TBOT_IBKR_PORT", "4002")
     )
     ibkr_port2: str = field(
-        default_factory=partial(os.environ.get, "TBOT_IBKR_PORT", "4003")
+        default_factory=partial(os.environ.get, "TBOT_IBKR_PORT2", "4003")
     )
     ibkr_addr: str = field(
         default_factory=partial(os.environ.get, "TBOT_IBKR_IPADDR", "127.0.0.1")
