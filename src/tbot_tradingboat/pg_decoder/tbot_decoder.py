@@ -546,33 +546,54 @@ class TBOTDecoder(TbotObserver):
         """
         ret = False
         sleep_on_error = 12
-        try:
-            logger.info("trying to connect to TWS/IBG")
-            self.ibsyn.connect(
-                shared.ibkr_addr,
-                int(shared.ibkr_port),
-                clientId=int(shared.client_id),
-            )
-            self.loop = util.getLoop()
-            logger.success("The connection to IBKR done well")
-            ret = True
-        except socket.error:
-            err = sys.exc_info()[1]
-            if err.errno == errno.ENETUNREACH:
-                logger.warning("please check network connection!")
+        # Use a flag to alternate between primary and secondary addresses
+        use_primary_addr = True
+
+        while not ret:
+            try:
+                if use_primary_addr:
+                    logger.info(f"trying to connect to TWS/IBG at {shared.ibkr_addr}:{shared.ibkr_port}")
+                    self.ibsyn.connect(
+                        shared.ibkr_addr,
+                        int(shared.ibkr_port),
+                        clientId=int(shared.client_id),
+                    )
+                else:
+                    logger.info(f"trying to connect to TWS/IBG at {shared.ibkr_addr2}:{shared.ibkr_port2}")
+                    self.ibsyn.connect(
+                        shared.ibkr_addr2,
+                        int(shared.ibkr_port2),
+                        clientId=int(shared.client_id),
+                    )
+
+                self.loop = util.getLoop()
+                logger.success("The connection to IBKR done well")
+                ret = True  # Exit the loop if connection succeeds
+
+            except socket.error:
+                err = sys.exc_info()[1]
+                if err.errno == errno.ENETUNREACH:
+                    logger.warning("please check network connection!")
+                    util.sleep(sleep_on_error)
+                if err.errno == errno.ECONNREFUSED:
+                    logger.warning("please check IP addr and port for TWS/IB!")
+                    util.sleep(sleep_on_error)
+
+                # Switch to the other address for the next attempt
+                use_primary_addr = not use_primary_addr
+
+            except BaseException as err:
+                self.loop = None
+                logger.error(
+                    "Make sure API port on TWS/IBG is open\n"
+                    f"Check API Settings -> General: {sleep_on_error}"
+                )
+                logger.error(f"{err}")
                 util.sleep(sleep_on_error)
-            if err.errno == errno.ECONNREFUSED:
-                logger.warning("please check IP addr and port for TWS/IB!")
-                util.sleep(sleep_on_error)
-            raise
-        except BaseException as err:
-            self.loop = None
-            logger.error(
-                "Make sure API port on TWS/IBG is open\n"
-                f"Check API Settings -> General: {sleep_on_error}"
-            )
-            logger.error(f"{err}")
-            util.sleep(sleep_on_error)
+
+                # Switch to the other address for the next attempt
+                use_primary_addr = not use_primary_addr
+
         return ret
 
     def update(
