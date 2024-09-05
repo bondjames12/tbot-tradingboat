@@ -29,6 +29,12 @@ class EnvSettings:
     ibkr_addr: str = field(
         default_factory=partial(os.environ.get, "TBOT_IBKR_IPADDR", "127.0.0.1")
     )
+    ibkr_port2: str = field(
+        default_factory=partial(os.environ.get, "TBOT_IBKR_PORT2", "4003")
+    )
+    ibkr_addr2: str = field(
+        default_factory=partial(os.environ.get, "TBOT_IBKR_IPADDR2", "127.0.0.2")
+    )
 
     # ---------------------------------
     # Redis database
