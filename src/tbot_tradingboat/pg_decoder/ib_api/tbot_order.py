@@ -111,6 +111,8 @@ class TbotOrder(ABC):
         contract = None
         if t_ord.contract == "stock":
             contract = Stock(t_ord.symbol, "SMART", t_ord.currency)
+        elif t_ord.contract == "fund":
+            contract = Stock(t_ord.symbol, "SMART", t_ord.currency)
         elif t_ord.contract == "forex":
             contract = Forex(pair=t_ord.symbol)
         elif t_ord.contract == "crypto":
