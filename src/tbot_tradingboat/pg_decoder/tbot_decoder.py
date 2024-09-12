@@ -431,7 +431,7 @@ class TBOTDecoder(TbotObserver):
             timestamp,
         ) = self.extract_order_parameters(data_dict)
         orderRefEx = get_ordref_ex(timeframe, orderRef)
-        tvSecType = ("stock", "forex", "crypto")
+        tvSecType = ("stock","fund", "forex", "crypto")
         _contract = data_dict.get("contract", "").strip().lower()
         if _contract in tvSecType:
             contract = _contract
@@ -636,7 +636,7 @@ class TBOTDecoder(TbotObserver):
         currency = t_ord.currency
         sec_type = (
             "STK"
-            if t_ord.contract == "stock"
+            if t_ord.contract == "stock" or t_ord.contract == "fund"
             else "CASH"
             if t_ord.contract == "forex"
             else "CRYPTO"
