@@ -257,3 +257,4 @@ class ErrorStates(Enum):
     EDUPORD = 15  # Duplicated orders
     ENOOPNTRD = 16  # No open trade
     ENOMKTPOSDB = 17  # No position to make flat in strategy_close_all
+    ENOBALANCE = 18 # Not enough avaliable balance

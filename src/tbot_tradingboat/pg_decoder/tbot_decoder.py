@@ -231,7 +231,7 @@ class TBOTDecoder(TbotObserver):
         In addition to strategy.entry(), this function can open a bracket order for IBKR.
         """
         if t_ord.qty <= 0:
-            logger.error(f"[X]: invalid message format: qty: {t_ord.qty}")
+            logger.error(f"[X]: invalid message format: Quantity less than 0 qty: {t_ord.qty}")
             return ErrorStates.EBADMSG
 
         state = ErrorStates.UNRECOG
@@ -242,36 +242,58 @@ class TBOTDecoder(TbotObserver):
         if (vec == np.array([0, 0, 0, 0])).all():
             if self.ib_check_balance(t_ord, t_ord.price):
                 state = self.torder.place_market_order(t_ord)
+            else:
+                state = ErrorStates.ENOBALANCE
         elif (vec == np.array([1, 0, 0, 0])).all():
             if self.ib_check_balance(t_ord, t_ord.entryLimit):
                 state = self.torder.place_limit_order(t_ord)
+            else:
+                state = ErrorStates.ENOBALANCE
         elif (vec == np.array([0, 1, 0, 0])).all():
             if self.ib_check_balance(t_ord, t_ord.entryStop):
                 state = self.torder.place_stop_order(t_ord)
+            else:
+                state = ErrorStates.ENOBALANCE
         elif (vec == np.array([1, 1, 0, 0])).all():
             if self.ib_check_balance(t_ord, t_ord.entryStop):
                 state = self.torder.place_stop_limit_order(t_ord)
+            else:
+                state = ErrorStates.ENOBALANCE
         elif (vec == np.array([1, 0, 1, 1])).all():
             if self.ib_check_balance(t_ord, t_ord.entryLimit):
                 state = self.torder.place_bracket_limit_order(t_ord)
+            else:
+                state = ErrorStates.ENOBALANCE
         elif (vec == np.array([0, 0, 1, 0])).all():
             if self.ib_check_balance(t_ord, t_ord.entryLimit):
                 state = self.torder.place_market_then_limit_order(t_ord)
+            else:
+                state = ErrorStates.ENOBALANCE
         elif (vec == np.array([0, 0, 0, 1])).all():
             if self.ib_check_balance(t_ord, t_ord.entryLimit):
                 state = self.torder.place_market_then_stop_order(t_ord)
+            else:
+                state = ErrorStates.ENOBALANCE
         elif (vec == np.array([1, 0, 1, 0])).all():
             if self.ib_check_balance(t_ord, t_ord.entryLimit):
                 state = self.torder.place_limit_then_limit_order(t_ord)
+            else:
+                state = ErrorStates.ENOBALANCE
         elif (vec == np.array([1, 0, 0, 1])).all():
             if self.ib_check_balance(t_ord, t_ord.entryLimit):
                 state = self.torder.place_limit_then_stop_order(t_ord)
+            else:
+                state = ErrorStates.ENOBALANCE
         elif (vec == np.array([0, 1, 1, 1])).all():
             if self.ib_check_balance(t_ord, t_ord.entryStop):
                 state = self.torder.place_bracket_stop_order(t_ord)
+            else:
+                state = ErrorStates.ENOBALANCE
         elif (vec == np.array([0, 0, 1, 1])).all():
             if self.ib_check_balance(t_ord, t_ord.price):
                 state = self.torder.place_bracket_market_order(t_ord)
+            else:
+                state = ErrorStates.ENOBALANCE
         else:
             logger.error(f"Unsupported orderType combinations: {_x}")
             state = ErrorStates.EBADORDTP
